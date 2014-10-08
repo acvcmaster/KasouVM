@@ -1,0 +1,1 @@
+g++ "main.cpp" "loadTFile/loadTFile.h" "loadTFile/loadTFile.o" -std=c++0x -o "bin/kasm"
