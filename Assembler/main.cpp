@@ -48,8 +48,19 @@ int main(int argc, char** argv)
 			if( !isValidOption(optName))
 			{
 				cout << INVALID_ARGUMENT << "'"
-					<< optName << "'." << endl;
+					<< optName << "'." << INVALID_ARGUMENT_CONT << endl;
 				return -1;
+			}
+
+			if( compareStr(optName, validOptions[0]))
+			{
+				// Display help message
+				if( optArg != NULL_CHAR_PTR)
+				{
+					cout << UNEXPECTED_ARGUMENT;
+					return -1;
+				}
+				cout << HELP_MESSAGE;
 			}
 		}
 		else

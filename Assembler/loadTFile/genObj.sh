@@ -1,1 +1,0 @@
-g++ loadTFile.cpp -c -std=c++0x
