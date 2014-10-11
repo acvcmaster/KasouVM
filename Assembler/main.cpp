@@ -57,10 +57,11 @@ int main(int argc, char** argv)
 				// Display help message
 				if( optArg != NULL_CHAR_PTR)
 				{
-					cout << UNEXPECTED_ARGUMENT;
+					cout << UNEXPECTED_ARGUMENT << UNEXPECTED_ARGUMENT_CONT;
 					return -1;
 				}
 				cout << HELP_MESSAGE;
+				return 0;
 			}
 		}
 		else
