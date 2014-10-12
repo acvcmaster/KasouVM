@@ -8,6 +8,7 @@
 using namespace std;
 
 char* validOptions[VALID_OPT_LEN] = {"h", "o"};
+char* assemblyName = "a.out";
 
 bool isValidOption(char* option);
 
@@ -22,7 +23,7 @@ int main(int argc, char** argv)
 	// process command-line options
 	int fileCount = 0;
 	char* fileNames[argc];
-	for(int i = 0; i < argc; i++)
+	for(int i = 1; i < argc; i++)
 	{
 		if( *THIS_ARG == '-') // Option
 		{
@@ -63,15 +64,31 @@ int main(int argc, char** argv)
 				cout << HELP_MESSAGE;
 				return 0;
 			}
+			else if( compareStr(optName, validOptions[1]))
+			{
+				// Force name
+				if( optArg == NULL_CHAR_PTR)
+				{
+					cout << EXPECTED_ARGUMENT;
+					return -1;
+				}
+				assemblyName = optArg;
+			}
 		}
 		else
 		{
 			fileNames[fileCount] = THIS_ARG;
 			fileCount++;
 		}
-
+	}
+	if( fileCount == 0)
+	{
+		cout << INSUFFICIENT_ARGS;
+		return -1;
 	}
 
+	// Open files and assemble
+	cout << "Assembling file '" << assemblyName << "'..\n";
 	return 0;
 }
 
