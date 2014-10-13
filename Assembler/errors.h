@@ -11,5 +11,8 @@
 #define UNEXPECTED_ARGUMENT "error : this option does not expect an argument. "
 #define UNEXPECTED_ARGUMENT_CONT "Try writing --option instead of -option.\n"
 #define EXPECTED_ARGUMENT "error : this option expects an argument. Try writing -option instead of --option.\n"
+#define INVALID_BUFFER_SIZE "error : invalid buffer size. The specified buffer size must be a non-negative integer.\n"
+#define COULD_NOT_OPEN_FILE "fail.\nerror : could not open file '%s'. Make sure it exists and is accessible.\n"
+#define OPENING_FILE "Trying to open file '%s'.. "
 
 #endif

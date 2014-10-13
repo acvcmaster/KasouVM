@@ -3,12 +3,14 @@
 
 #define NO_MORE_ARGS i == argc - 1
 #define THIS_ARG *(argv + i)
-#define VALID_OPT_LEN 2
+#define VALID_OPT_LEN 4
 
 using namespace std;
 
-char* validOptions[VALID_OPT_LEN] = {"h", "o"};
+char* validOptions[VALID_OPT_LEN] = {"h", "o", "b", "no_warnings"};
 char* assemblyName = "a.out";
+int bufferSize = 2048;
+bool noWarnings = false;
 
 bool isValidOption(char* option);
 
@@ -28,7 +30,8 @@ int main(int argc, char** argv)
 		if( *THIS_ARG == '-') // Option
 		{
 			char* optName;
-			char* optArg;
+			char* optArg = NULL_CHAR_PTR;
+
 			if( *(THIS_ARG + 1) != '-')
 			{
 				// Option with argument
@@ -74,6 +77,40 @@ int main(int argc, char** argv)
 				}
 				assemblyName = optArg;
 			}
+			else if( compareStr(optName, validOptions[2]))
+			{
+				// Change buffer size
+				if( optArg == NULL_CHAR_PTR)
+				{
+					cout << EXPECTED_ARGUMENT;
+					return -1;
+				}
+				int _bufferSize = atoi(optArg);
+				if( _bufferSize > 0)
+				{
+					bufferSize = _bufferSize;
+					if( !noWarnings)
+					{
+						cout << "warning: Buffer size set to a non-standard value (" << bufferSize << ")."
+							<<" Compilation will fail if it's too small. (--no_warnings to suppress)\n\n";
+					}
+				}
+				else
+				{
+					cout << INVALID_BUFFER_SIZE;
+					return -1;
+				}
+			}
+			else if( compareStr(optName, validOptions[3]))
+			{
+				// suppress warnings
+				if( optArg != NULL_CHAR_PTR)
+				{
+					cout << UNEXPECTED_ARGUMENT << UNEXPECTED_ARGUMENT_CONT;
+					return -1;
+				}
+				noWarnings = true;
+			}
 		}
 		else
 		{
@@ -89,6 +126,18 @@ int main(int argc, char** argv)
 
 	// Open files and assemble
 	cout << "Assembling file '" << assemblyName << "'..\n";
+	fileInfo* allFiles[fileCount];
+	for(int i = 0; i < fileCount; i++)
+	{
+		allFiles[i] = readFile(fileNames[i], bufferSize);
+		printf(OPENING_FILE, fileNames[i]);
+		if( allFiles[i]->isNull())
+		{
+			printf(COULD_NOT_OPEN_FILE, fileNames[i]);
+			return -1;
+		}
+		cout << "OK.\n";
+	}
 	return 0;
 }
 
