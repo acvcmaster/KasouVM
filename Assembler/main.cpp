@@ -138,6 +138,10 @@ int main(int argc, char** argv)
 		}
 		cout << "OK.\n";
 	}
+
+	// All green. Start assembling.
+	assembler objectAsm(allFiles, fileCount);
+	objectAsm.assemble();
 	return 0;
 }
 
