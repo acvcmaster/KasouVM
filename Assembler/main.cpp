@@ -4,12 +4,13 @@
 #define NO_MORE_ARGS i == argc - 1
 #define THIS_ARG *(argv + i)
 #define VALID_OPT_LEN 4
+#define STD_BUFFER_SIZE 2048
 
 using namespace std;
 
 char* validOptions[VALID_OPT_LEN] = {"h", "o", "b", "no_warnings"};
 char* assemblyName = "a.out";
-int bufferSize = 2048;
+int bufferSize = STD_BUFFER_SIZE;
 bool noWarnings = false;
 
 bool isValidOption(char* option);
@@ -37,8 +38,7 @@ int main(int argc, char** argv)
 				// Option with argument
 				if( NO_MORE_ARGS)
 				{
-					cout << ARGUMENT_EXPECTED 
-						<< "'" << THIS_ARG << "'." << endl;
+					printf(ARGUMENT_EXPECTED, THIS_ARG);
 					return -1;
 				}
 				optName = (THIS_ARG + 1);
@@ -51,8 +51,7 @@ int main(int argc, char** argv)
 			// Check to see if option exists
 			if( !isValidOption(optName))
 			{
-				cout << INVALID_ARGUMENT << "'"
-					<< optName << "'." << INVALID_ARGUMENT_CONT << endl;
+				printf(INVALID_ARGUMENT, optName, INVALID_ARGUMENT_CONT);
 				return -1;
 			}
 
@@ -87,14 +86,7 @@ int main(int argc, char** argv)
 				}
 				int _bufferSize = atoi(optArg);
 				if( _bufferSize > 0)
-				{
 					bufferSize = _bufferSize;
-					if( !noWarnings)
-					{
-						cout << "warning: Buffer size set to a non-standard value (" << bufferSize << ")."
-							<<" Compilation will fail if it's too small. (--no_warnings to suppress)\n\n";
-					}
-				}
 				else
 				{
 					cout << INVALID_BUFFER_SIZE;
@@ -118,6 +110,14 @@ int main(int argc, char** argv)
 			fileCount++;
 		}
 	}
+
+	if( !noWarnings)
+	{
+		// Display warnings
+		if( bufferSize != STD_BUFFER_SIZE)
+			printf(W_NON_STANDARD_BUFFER_SIZE, bufferSize);
+	}
+	
 	if( fileCount == 0)
 	{
 		cout << INSUFFICIENT_ARGS;
