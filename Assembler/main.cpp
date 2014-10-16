@@ -1,4 +1,10 @@
-#include "allIncludes.h"
+#include "loadFile/loadFile.h"
+#include "loadFile/errors.h"
+#include "errors.h"
+#include "misc.h"
+#include "assembler.h"
+#include "stdio.h"
+#include "stdlib.h"
 #include <iostream>
 
 #define NO_MORE_ARGS i == argc - 1
@@ -129,19 +135,28 @@ int main(int argc, char** argv)
 	fileInfo* allFiles[fileCount];
 	for(int i = 0; i < fileCount; i++)
 	{
-		allFiles[i] = readFile(fileNames[i], bufferSize);
 		printf(OPENING_FILE, fileNames[i]);
+		allFiles[i] = readFile(fileNames[i], bufferSize);
+
 		if( allFiles[i]->isNull())
 		{
 			printf(COULD_NOT_OPEN_FILE, fileNames[i]);
+			
+			// Next line will only compile when using the c++0x standard (Remove 'fileInfoErrorID::' to make it always compile)
+			if( allFiles[i]->errorID == fileInfoErrorID::BUFFER_SIZE_TOO_SMALL)
+				printf(BUFFER_OVERFLOW_ERROR, STD_BUFFER_SIZE);
+			else
+				cout << COULD_NOT_OPEN_FILE_OTHER;
 			return -1;
 		}
 		cout << "OK.\n";
 	}
 
 	// All green. Start assembling.
-	assembler objectAsm(allFiles, fileCount);
-	objectAsm.assemble();
+	assembler* objectAsm = new assembler(allFiles, fileCount);
+	objectAsm->assemble();
+	// ...
+	delete objectAsm;
 	return 0;
 }
 

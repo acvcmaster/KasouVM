@@ -2,6 +2,7 @@
 #include <string>
 #include <iostream>
 #include "loadFile.h"
+#include "errors.h"
 #include "stdlib.h"
 
 using namespace std;
@@ -22,6 +23,7 @@ bool fileInfo::isNull()
 fileInfo* readFile(char* name, int bufferSize)
 {
 	fileInfo* result = fileInfo::nullInfo();
+	result->errorID = fileInfoErrorID::OTHER;
 	char* buffer = (char*)malloc(bufferSize);
 	ifstream tFile;
 	tFile.open(name);
@@ -33,7 +35,7 @@ fileInfo* readFile(char* name, int bufferSize)
 	{
 		if( count == bufferSize)
 		{
-			cout << BUFFER_OVERFLOW_ERROR;
+			result->errorID = fileInfoErrorID::BUFFER_SIZE_TOO_SMALL;
 			return result;
 		}
 		tFile.read(buffer + count, 1);
