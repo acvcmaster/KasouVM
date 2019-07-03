@@ -18,6 +18,6 @@ void assembler::issueError(bool* e, char* errorMessage)
 bool assembler::assemble()
 {
 	bool errorHasOccured = false;
-	
+	cout << "assembling.." << endl;	
 	return errorHasOccured;
 }
